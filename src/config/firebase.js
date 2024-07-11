@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { collection, addDoc, getDocs } from "firebase/firestore"; 
+import { collection, getDocs } from "firebase/firestore"; 
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCTb0ckZQBwrsQgrs0d4Vk0BmrgceXpZ7M",
@@ -22,6 +23,7 @@ export {auth};
 const db = getFirestore(app);
 export {db};
 const colRef = collection(db, 'users');
+export {colRef};
 
 //get collection from db
 function UsersList() {

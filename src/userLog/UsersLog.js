@@ -1,21 +1,49 @@
+import {React, useState} from "react";
+import { addDoc } from "firebase/firestore";
+import { colRef } from "../config/firebase";
 
-
-export function UserInput(){
+function AddUserForm() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        await addDoc(colRef, {
+          name,
+          email
+        });
+        setName('');
+        setEmail('');
+        alert('User added successfully!');
+      } catch (error) {
+        console.error('Error adding document: ', error);
+        alert('Error adding user');
+      }
+    };
+  
     return (
+      <form onSubmit={handleSubmit}>
         <div>
-             <input type="text" placeholder="Name"/>
-             <input type="text" placeholder="Surname"/>
-             <input type="text" placeholder="Email"/>
-             <input type="text" placeholder="Contact Number"/>
+          <label>Name:</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </div>
-       
-    )
-}
-
-export function LoginBtn(){
-   return(
-    <button>
-        Login
-    </button>
-   ) 
-};
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <button type="submit">Add User</button>
+      </form>
+    );
+  }
+  
+  export default AddUserForm;
+  

@@ -1,40 +1,75 @@
 import UsersList, { auth } from "../../../config/firebase";
-import {useState} from "react";
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import {useState, useEffect} from "react";
+import { signInWithEmailAndPassword , onAuthStateChanged, signOut} from 'firebase/auth';
+import { NavBar } from "./NavBar";
 
 
 export const Auth = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
-    const signIn = async () => {
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-            console.log(user);
-        } catch (error) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.error(`Error ${errorCode}: ${errorMessage}`);
+    const [error, setError] = useState("");
+    const [user, setUser] = useState(null);
+  
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        if (currentUser) {
+          setUser(currentUser);
+        } else {
+          setUser(null);
         }
+      });
+      return () => unsubscribe();
+    }, []);
+  
+    const signIn = async () => {
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        setError(""); // Clear error message on successful login
+      } catch (error) {
+        setError(error.message);
+      }
     };
-
+  
+    const logout = async () => {
+      try {
+        await signOut(auth);
+        console.log("User signed out");
+      } catch (error) {
+        console.error("Error signing out: ", error);
+      }
+    };
+  
     return (
-        <div>
-            <input 
-                type="email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                placeholder="Email" 
+      <div>
+           
+      
+        {error && <p>{error}</p>}
+        {user ? (
+          <div>
+            <NavBar/>
+            <div className="py-7">
+            <p>Welcome, {user.email}</p>
+            <UsersList />
+            <button onClick={logout}>Logout</button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <input 
-                type="password" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                placeholder="Password" 
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
-            <button onClick={signIn}>Sign In</button>
-          
-        </div>
+            <button onClick={signIn}>Login</button>
+          </>
+        )}
+      </div>
     );
-};
+  };

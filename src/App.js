@@ -1,17 +1,18 @@
 import React from 'react';
 import './App.css';
-import { useState } from 'react';
+import { auth } from "../src/config/firebase";
+import { useState, useEffect } from 'react';
 import {UserBtn, AdminBtn } from './home/home';
+import { onAuthStateChanged} from 'firebase/auth';
+
 import { Auth } from './admin/components/auth/auth';
-import { LoginBtn, UserInput } from './userLog/UsersLog';
-import UsersList from './config/firebase';
-
-
+import AddUserForm, { } from './userLog/UsersLog';
 
 
 
 function App() {
   const [currentView, setCurrentView] = useState('first');
+  const [user, setUser] = useState(null);
 
   const handleAdminClick = () => {
     setCurrentView('second');
@@ -21,32 +22,34 @@ function App() {
     setCurrentView('third');
   };
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        setUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+
+
   return (
     <div>
-      {currentView === 'first' && (
-        <div>
-          <AdminBtn onClick={handleAdminClick} />
-          <UserBtn onClick={handleUserClick} />
-        </div>
-      )}
-      {currentView === 'second' && (
-        <div>
-          <Auth />
-          <UsersList/>
-        </div>
-        )
-      }
-      {currentView === 'third' && (
-        <div>
-       
-       <UserInput />
-       <LoginBtn/>
-      
-      </div>)}
+     {currentView === 'first' && (
+    <div>
+      <AdminBtn onClick={handleAdminClick} />
+      <UserBtn onClick={handleUserClick} />
+    </div>
+  )}
+  {currentView === 'second' && <Auth />}
+  {currentView === 'third' && <AddUserForm />}
+  {/* {user && (
+    <button onClick={logout}>Logout</button>
+  )} */}
     </div>
   );
 }
-
-
 
 export default App;
