@@ -5,16 +5,19 @@ import { colRef } from "../config/firebase";
 function AddUserForm() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [number, setNumber] = useState('');
   
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
         await addDoc(colRef, {
           name,
-          email
+          email,
+          number
         });
         setName('');
         setEmail('');
+        setNumber('');
         alert('User added successfully!');
       } catch (error) {
         console.error('Error adding document: ', error);
@@ -23,13 +26,23 @@ function AddUserForm() {
     };
   
     return (
-      <form onSubmit={handleSubmit}>
+       <form onSubmit={handleSubmit}>
         <div>
           <label>Name:</label>
           <input
             type="text"
+            placeholder="First and Last name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Cellphone Nr:</label>
+          <input
+            type="number"
+            placeholder="Cellphone Number"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
           />
         </div>
         <div>

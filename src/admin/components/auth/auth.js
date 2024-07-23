@@ -1,7 +1,10 @@
-import UsersList, { auth } from "../../../config/firebase";
+import  { auth } from "../../../config/firebase";
 import {useState, useEffect} from "react";
 import { signInWithEmailAndPassword , onAuthStateChanged, signOut} from 'firebase/auth';
-import { NavBar } from "./NavBar";
+// import { NavBar } from "./NavBar";
+// import { KanBan } from "./KanBan";
+import UsersList from "../../../config/firebase";
+import { KanBan } from "./KanBan";
 
 
 export const Auth = () => {
@@ -41,17 +44,17 @@ export const Auth = () => {
   
     return (
       <div>
-           
-      
+
         {error && <p>{error}</p>}
         {user ? (
           <div>
-            <NavBar/>
-            <div className="py-7">
-            <p>Welcome, {user.email}</p>
-            <UsersList />
-            <button onClick={logout}>Logout</button>
-            </div>
+                
+                <div className="py-7">
+                  <p>Welcome, {user.email}</p>
+                  <KanBan />
+                  <button onClick={logout}>Logout</button>
+          </div>
+
           </div>
         ) : (
           <>

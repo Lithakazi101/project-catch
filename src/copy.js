@@ -42,3 +42,25 @@
 //   background-color: #f0f0f0; /* Light grey background */
 //   font-family: Arial, sans-serif;
 // } */
+
+// ADMin and user list
+<div className="py-7">
+<p>Welcome, {user.email}</p>
+<UsersList />
+<button onClick={logout}>Logout</button>
+</div>
+
+
+
+
+{currentView === 'first' && (
+    <div>
+      <AdminBtn onClick={handleAdminClick} />
+      <UserBtn onClick={handleUserClick} />
+    </div>
+  )}
+  {currentView === 'second' && <Auth />}
+  {currentView === 'third' && <AddUserForm />}
+  {/* {user && (
+    <button onClick={logout}>Logout</button>
+  )} */}

@@ -7,6 +7,9 @@ import { onAuthStateChanged} from 'firebase/auth';
 
 import { Auth } from './admin/components/auth/auth';
 import AddUserForm, { } from './userLog/UsersLog';
+import { DndContext } from '@dnd-kit/core';
+import { Draggable, Droppable } from './admin/components/auth/KanBan';
+import { NavBar } from './admin/components/auth/NavBar';
 
 
 
@@ -36,19 +39,24 @@ function App() {
 
 
   return (
-    <div>
-     {currentView === 'first' && (
-    <div>
-      <AdminBtn onClick={handleAdminClick} />
-      <UserBtn onClick={handleUserClick} />
-    </div>
-  )}
-  {currentView === 'second' && <Auth />}
-  {currentView === 'third' && <AddUserForm />}
-  {/* {user && (
-    <button onClick={logout}>Logout</button>
-  )} */}
-    </div>
+      <div>
+           {currentView === 'first' && (
+           <div>
+      <div className='flex space-x-14  items-center justify-center min-h-screen'>
+        <AdminBtn onClick={handleAdminClick} />
+        <UserBtn onClick={handleUserClick} />
+      </div>
+      </div>
+    )}
+    {currentView === 'second' && <Auth />}
+    {currentView === 'third' && <AddUserForm />}
+    {/* {user && (
+      <button onClick={logout}>Logout</button>
+    )} */}
+  
+      </div>
+ 
+    
   );
 }
 

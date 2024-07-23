@@ -3,7 +3,7 @@ import React from "react";
 export function UserBtn({onClick}){
   return (
     <div>
-      <button onClick={onClick}>User</button>
+      <button onClick={onClick} className="rounded border border-neutral-700 p-10 active:cursor-grabbing">User</button>
     </div>
   )
 }
@@ -11,7 +11,7 @@ export function UserBtn({onClick}){
 export function AdminBtn({onClick}){
   return (
 <div>
-  <button onClick={onClick}> Admin</button>
+  <button onClick={onClick} className="rounded border border-neutral-800 p-10 active:cursor-grabbing"> Admin</button>
 </div>
   )
 }
