@@ -19,7 +19,7 @@ export function AdminBtn({onClick}){
 export function HomeBtn({onClick}){
  return(
  <div>
-    <button  className="rounded border border-neutral-800 p-2 active:cursor-grabbing" onClick={onClick}>Home</button>
+    <button onClick={onClick}>Home</button>
   </div>)
 }
 

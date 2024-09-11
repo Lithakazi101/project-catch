@@ -1,99 +1,160 @@
-import { useState } from "react";
-import UsersList from "../../../config/firebase";
+import React, { useEffect, useState } from 'react';
+import { getDocs, doc, updateDoc } from "firebase/firestore";
 
-export const KanBan = ()=>{
+import { colRef } from "../../../config/firebase";
+import { DndContext, DragOverlay, useDraggable, useDroppable } from '@dnd-kit/core';
+
+const statuses = ['Visitors', 'Contacted', 'OnHoliday', 'FrequentVisitor'];
+const KanbanBoard = () => {
+  const [users, setUsers] = useState([]);
+  const [columns, setColumns] = useState({
+    visitors: [],
+    contacted: [],
+    onHoliday: [],
+    frequentVisitor: [],
+  });
+  const [activeId, setActiveId] = useState(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const snapshot = await getDocs(colRef);
+        const usersArray = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+        setUsers(usersArray);
+
+        const columnData = {
+          visitors: [],
+          contacted: [],
+          onHoliday: [],
+          frequentVisitor: [],
+        };
+
+        usersArray.forEach(user => {
+          if (user.status === 'Visitors') columnData.visitors.push(user);
+          if (user.status === 'Contacted') columnData.contacted.push(user);
+          if (user.status === 'OnHoliday') columnData.onHoliday.push(user);
+          if (user.status === 'FrequentVisitor') columnData.frequentVisitor.push(user);
+        });
+
+        setColumns(columnData);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const handleStatusChange = async (userId, newStatus) => {
+    try {
+      const userDocRef = doc(colRef, userId);
+      await updateDoc(userDocRef, { status: newStatus });
+
+      const updatedUsers = users.map(user => 
+        user.id === userId ? { ...user, status: newStatus } : user
+      );
+      setUsers(updatedUsers);
+
+      const columnData = {
+        visitors: [],
+        contacted: [],
+        onHoliday: [],
+        frequentVisitor: [],
+      };
+
+      updatedUsers.forEach(user => {
+        if (user.status === 'Visitors') columnData.visitors.push(user);
+        if (user.status === 'Contacted') columnData.contacted.push(user);
+        if (user.status === 'OnHoliday') columnData.onHoliday.push(user);
+        if (user.status === 'FrequentVisitor') columnData.frequentVisitor.push(user);
+      });
+
+      setColumns(columnData);
+    } catch (error) {
+      console.error('Error updating user status:', error);
+    }
+  };
+
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) {
+      // The user was dragged and dropped in the same column or dropped outside
+      setActiveId(null);
+      return;
+    }
+
+    const oldColumnKey = active.data.current?.columnId;
+    const newColumnKey = over.id;
+
+    if (oldColumnKey && newColumnKey && oldColumnKey !== newColumnKey) {
+      const userId = active.id;
+      const newStatus = capitalizeFirstLetter(newColumnKey);
+
+      handleStatusChange(userId, newStatus);
+    }
+
+    setActiveId(null);
+  };
+
+  const DraggableItem = ({ user }) => {
+    const { attributes, listeners, setNodeRef } = useDraggable({ 
+      id: user.id, 
+      data: { columnId: user.status.toLowerCase().replace(' ', '') } 
+    });
+
     return (
-       <div className="h-screen w-full bg-neutral-100 text-neutral-800">
-        <Board/>
-       </div>
-    )
-}
+      <div
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+        className="user-card bg-white p-3 rounded mb-2 shadow-sm"
+      >
+        <h3 className="text-md font-semibold">{user.name}</h3>
+        <p>{user.email}</p>
+        <p>{user.number}</p>
+      </div>
+    );
+  };
 
-const Board = ()=> {
-    const [cards, setCards] = useState([]);
-    return (<div className="flex h-full w-full gap-3 overflow-scroll p-12">
-        <Column1 title='Visitors'
-         column='visitor'
-         headingColor="text-neutral-500"
-         cards={cards}
-         setCards={setCards}
-         />
-        <Column2 title='Contacted'
-         column='contacted'
-         headingColor="text-neutral-500"
-         cards={cards}
-         setCards={setCards}
-         />
-          <Column3 title='On Holiday'
-         column='on holiday'
-         headingColor="text-neutral-500"
-         cards={cards}
-         setCards={setCards}
-         />
-          <Column4 title='Frequent Visitor'
-         column='frequent visitor'
-         headingColor="text-neutral-500"
-         cards={cards}
-         setCards={setCards}
-         />
-    </div>)
-}
-
-const Column1 = ({title, headingColor, column,cards, setCards}) =>{
-const [active, setActive] = useState(false);
+  const DroppableColumn = ({ columnId, children }) => {
+    const { setNodeRef } = useDroppable({ id: columnId });
 
     return (
-    <div className="w-56 shrink-0">
-        <div className="mb-3 flex items-center justify-between">
-            <h3 className={`font-medium ${headingColor}`}>{title}</h3>
-            
-        </div>
-        <div className={`h-full w-full transition-colors ${active ? "bg-neutral-800/50" : "bg-neutral-800/0"}`}>
-            <UsersList/>
-            </div>
+      <div
+        ref={setNodeRef}
+        className="kanban-column bg-gray-100 p-4 rounded shadow-md flex flex-col"
+      >
+        <h2 className="text-lg font-bold mb-2">{capitalizeFirstLetter(columnId)}</h2>
+        {children}
+      </div>
+    );
+  };
 
-    </div>)
-}
+  return (
+    <DndContext onDragEnd={handleDragEnd}>
+      <div className="kanban-board flex gap-4 p-4">
+        {Object.keys(columns).map(columnKey => (
+          <DroppableColumn key={columnKey} columnId={columnKey}>
+            {columns[columnKey].map(user => (
+              <DraggableItem key={user.id} user={user} />
+            ))}
+          </DroppableColumn>
+        ))}
+      </div>
+      <DragOverlay>
+        {activeId ? (
+          <div className="user-card bg-white p-3 rounded shadow-sm">
+            {users.find(user => user.id === activeId)?.Name}
+          </div>
+        ) : null}
+      </DragOverlay>
+    </DndContext>
+  );
+};
 
-const Column2 = ({title, headingColor, column,cards, setCards}) =>{
-    const [active, setActive] = useState(false);
-    return (
-        <div className="w-56 shrink-0">
-            <div className="mb-3 flex items-center justify-between">
-                <h3 className={`font-medium ${headingColor}`}>{title}</h3>
-                
-            </div>
-            <div className={`h-full w-full transition-colors ${active ? "bg-neutral-800/50" : "bg-neutral-800/0"}`}>
-               
-                </div>
-    
-        </div>)
-}
-const Column3 = ({title, headingColor, column,cards, setCards}) =>{
-    const [active, setActive] = useState(false);
-    return (
-        <div className="w-56 shrink-0">
-            <div className="mb-3 flex items-center justify-between">
-                <h3 className={`font-medium ${headingColor}`}>{title}</h3>
-                
-            </div>
-            <div className={`h-full w-full transition-colors ${active ? "bg-neutral-800/50" : "bg-neutral-800/0"}`}>
-               
-                </div>
-    
-        </div>)
-}
-const Column4 = ({title, headingColor, column,cards, setCards}) =>{
-    const [active, setActive] = useState(false);
-    return (
-        <div className="w-56 shrink-0">
-            <div className="mb-3 flex items-center justify-between">
-                <h3 className={`font-medium ${headingColor}`}>{title}</h3>
-                
-            </div>
-            <div className={`h-full w-full transition-colors ${active ? "bg-neutral-800/50" : "bg-neutral-800/0"}`}>
-               
-                </div>
-    
-        </div>)
-}
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+export default KanbanBoard;

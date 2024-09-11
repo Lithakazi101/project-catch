@@ -1,5 +1,5 @@
 import './Nav.css';
-
+import { Filter } from './Filter';
 
 export const NavBar = () =>{
 
@@ -22,12 +22,13 @@ export const NavBarAdmin = () =>{
   return (
       
     <nav className="flow-root">
-      <input className="float-right " placeholder="Search"/>
+          <div className='float-right'>
+            {/* <Filter/> */}
+          </div>
+
       <h2>THE GREENROOM</h2>
     </nav>
 
-
-      
       
   )
 }
