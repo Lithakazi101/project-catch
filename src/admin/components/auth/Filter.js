@@ -4,39 +4,56 @@ import { getDocs, where, query} from "firebase/firestore"
 import { useEffect } from "react"
 
 
-export const Filter = ()=>{
-    const [filter, setFilter] = useState({
-        Visitor: [],
-        Contacted: [],
-        FrequentVisitor:[],
-        OnHoliday:[],
-    })
-    useEffect = ()=>{
-        const fetchOption = async () =>{
-        try {
-            const ChosenOption = query((colRef), where('status', '===', value));
-            const querySnapshot = await getDocs(ChosenOption);
-            setFilter(querySnapshot);
-        }
-        catch(error){
-            console.log('Error in retrieving info', error)
-        }
-    }
+const useFetchData = (status) => {
+    const [filtered, setFilteredData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-}
+    useEffect(()=>{
+        setLoading(true);
+        const filteredData = async() =>{
+            try{
+            const q = query(colRef, where('status', '==', status));
+            const snapshot = await getDocs(q);
+            const data = snapshot.docs.map(doc =>({...doc.data(), id: doc.id}));
+            console.log('fetched data : ', data)
+            setFilteredData(data)
+        }catch(error){
+            console.error('Error retrieving data', error)
+        } finally{
+            setLoading(false);
+        }
+        };
+        filteredData();
+    },[status] );
+    return {filtered, loading};
+};
 
+export const ContactButton =({onClick}) =>{
 
     return(
-      <div>
-        <label>Filter</label>
-              <select>
-                <option onClick={fetchOption()} value='Visitors'>Visitors</option>
-                <option onClick={fetchOption()} value="Contacted">Contacted</option>
-                <option onClick={fetchOption()} value="FrequentVisitor">FrequentVisitor</option>
-                <option onClick={fetchOption()} value='OnHoliday'>OnHoliday</option>
-            
-              </select>
+        <div>
+            <button onClick={onClick}>Contact</button>
+        </div>
+    )
+}
+
+const ContactedFx = () =>{
+    const {filtered, loading} = useFetchData('Contacted')
+    if(loading){
+        return <div>loading....</div>
+    }
+
+  return(
+    <div>
+        {filtered.map(user => (
+           
+      <div key={user.id} className="user-card bg-white p-3 rounded mb-2 shadow-sm">
+        <h3>{user.name}</h3>
+        <p>{user.email}</p>
       </div>
-    )     
-  
-  }
+    ))}
+    </div>
+  )
+
+}
+export default ContactedFx;

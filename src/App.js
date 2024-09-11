@@ -10,6 +10,7 @@ import AddUserForm, { } from './userLog/UsersLog';
 import { DndContext } from '@dnd-kit/core';
 import { Draggable, Droppable } from './admin/components/auth/KanBan';
 import { NavBar} from './admin/components/auth/NavBar';
+import ContactedFx, { ContactButton } from './admin/components/auth/Filter';
 
 
 function App() {
@@ -28,7 +29,9 @@ const handleUserClick = () => {
 const homePage = () =>{
   setCurrentView('first')
 }
-
+const Contacted = () =>{
+ setCurrentView('forth');
+}
 
   return (
       <div>
@@ -46,6 +49,7 @@ const homePage = () =>{
     {currentView === 'second' && (
       <div>
       <div>
+        <ContactButton onClick={Contacted}/>
          <Auth />
          <HomeBtn onClick={homePage}/>
       </div>
@@ -61,7 +65,11 @@ const homePage = () =>{
    
     
     )}
- 
+      {currentView === 'forth' && (
+        <ContactedFx/>
+      )
+
+      }
       </div>
  
     
