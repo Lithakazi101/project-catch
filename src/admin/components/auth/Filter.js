@@ -15,7 +15,7 @@ const useFetchData = (status) => {
             const q = query(colRef, where('status', '==', status));
             const snapshot = await getDocs(q);
             const data = snapshot.docs.map(doc =>({...doc.data(), id: doc.id}));
-            console.log('fetched data : ', data)
+           
             setFilteredData(data)
         }catch(error){
             console.error('Error retrieving data', error)
