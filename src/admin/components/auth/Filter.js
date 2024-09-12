@@ -28,6 +28,30 @@ const useFetchData = (status) => {
     return {filtered, loading};
 };
 
+export const VisitorsButton =({onClick}) =>{
+
+    return(
+        <div>
+            <button onClick={onClick}> Visitors</button>
+        </div>
+    )
+}
+export const FrequentVisitorButton =({onClick}) =>{
+
+    return(
+        <div>
+            <button onClick={onClick}>Frequent Visitors</button>
+        </div>
+    )
+}
+export const onHolidayButton =({onClick}) =>{
+
+    return(
+        <div>
+            <button onClick={onClick}>On Holiday Visitors</button>
+        </div>
+    )
+}
 const ContactedFx = () =>{
     const {filtered, loading} = useFetchData('Contacted')
     if(loading){
