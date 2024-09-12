@@ -5,7 +5,7 @@ import {UserBtn, AdminBtn,HomeBtn } from './home/home';
 import { Auth } from './admin/components/auth/auth';
 import AddUserForm, { } from './userLog/UsersLog';
 import { NavBar} from './admin/components/auth/NavBar';
-import ContactedFx, { ContactedButton, FrequentVisitorButton, FrequentVisitorFx, OnHolidayFx, OptionButton, VisitorsButton, VisitorsFx } from './admin/components/auth/Filter';
+import ContactedFx, { ContactedButton, FrequentVisitorButton, FrequentVisitorFx, OnHolidayFx, VisitorsButton, VisitorsFx , OnHolidayButton} from './admin/components/auth/Filter';
 
 
 function App() {
