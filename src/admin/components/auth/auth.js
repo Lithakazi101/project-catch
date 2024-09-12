@@ -55,7 +55,7 @@ export const Auth = () => {
                
                 <KanBan/>
                 
-              <button onClick={logout}>Logout</button>
+              <button  className="flex justify-center align-middle bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" onClick={logout}>Logout</button>
           </div>
 
           </div>

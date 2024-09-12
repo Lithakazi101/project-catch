@@ -1,1 +1,11 @@
 
+h2{
+    font-size: 2rem; /* Adjust as needed */
+    font-weight: bold;
+    color: #1d2229; /* Example color */
+    margin-bottom: 1rem; /* Adjust as needed */
+  }
+
+.home{
+        margin-left: -17em;;
+  }

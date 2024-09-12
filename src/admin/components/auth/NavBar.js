@@ -21,11 +21,8 @@ export const NavBarAdmin = () =>{
 
   return (
       
-    <nav className="flow-root">
-          <div className='float-right'>
-            {/* <Filter/> */}
-          </div>
-
+    <nav className="flow-root ">
+         
       <h2>THE GREENROOM</h2>
     </nav>
 

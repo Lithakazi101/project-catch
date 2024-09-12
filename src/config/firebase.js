@@ -1,13 +1,9 @@
-import React from "react";
-import { useState, useEffect } from "react";
+
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { collection, getDocs } from "firebase/firestore"; 
-import { DndContext, closestCenter, useDroppable } from "@dnd-kit/core";
-import {CSS} from '@dnd-kit/utilities';
+import { collection } from "firebase/firestore"; 
 
-import { SortableContext,useSortable, verticalListSortingStrategy, arrayMove} from "@dnd-kit/sortable";
  
 
 const firebaseConfig = {
