@@ -1,16 +1,11 @@
 import React from 'react';
 import './App.css';
-import { auth } from "../src/config/firebase";
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import {UserBtn, AdminBtn,HomeBtn } from './home/home';
-import { onAuthStateChanged} from 'firebase/auth';
-
 import { Auth } from './admin/components/auth/auth';
 import AddUserForm, { } from './userLog/UsersLog';
-import { DndContext } from '@dnd-kit/core';
-import { Draggable, Droppable } from './admin/components/auth/KanBan';
 import { NavBar} from './admin/components/auth/NavBar';
-import ContactedFx, { ContactButton } from './admin/components/auth/Filter';
+import ContactedFx, { ContactedButton, FrequentVisitorButton, FrequentVisitorFx, OnHolidayFx, OptionButton, VisitorsButton, VisitorsFx } from './admin/components/auth/Filter';
 
 
 function App() {
@@ -32,7 +27,15 @@ const homePage = () =>{
 const Contacted = () =>{
  setCurrentView('forth');
 }
-
+const Visitors = () =>{
+  setCurrentView('fifth');
+ }
+ const onHoliday = () =>{
+  setCurrentView('sixth');
+ }
+ const FrequentVisitor = () =>{
+  setCurrentView('forth');
+ }
   return (
       <div>
            {currentView === 'first' && (
@@ -49,7 +52,11 @@ const Contacted = () =>{
     {currentView === 'second' && (
       <div>
       <div>
-        <ContactButton onClick={Contacted}/>
+        <ContactedButton onClick={Contacted}/>
+        <VisitorsButton onClick={Visitors}/>
+        <FrequentVisitorButton onClick={FrequentVisitor}/>
+        <onHolidayButton onClick={onHoliday}/>
+
          <Auth />
          <HomeBtn onClick={homePage}/>
       </div>
@@ -66,7 +73,27 @@ const Contacted = () =>{
     
     )}
       {currentView === 'forth' && (
-        <ContactedFx/>
+        <div>
+          <ContactedFx />
+        </div>
+      )
+      }
+      {currentView ==="fifth" &&(
+        <div>
+           <VisitorsFx/>
+        </div>
+      )
+      }
+      {currentView =="sixth" &&(
+        <div>
+           <OnHolidayFx/>
+        </div>
+      )
+      }
+      {currentView === "seventh"(
+        <div>
+          <FrequentVisitorFx/>
+        </div>
       )
 
       }
