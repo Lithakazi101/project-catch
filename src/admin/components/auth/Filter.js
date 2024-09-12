@@ -27,16 +27,40 @@ const useFetchData = (status) => {
     },[status] );
     return {filtered, loading};
 };
-
-export const ContactButton =({onClick}) =>{
+// change the name and make it universal for 
+export const ContactedButton =({onClick}) =>{
 
     return(
         <div>
-            <button onClick={onClick}>Contact</button>
+            <button onClick={onClick}>Contacted Visitors</button>
         </div>
     )
 }
 
+export const VisitorsButton =({onClick}) =>{
+
+    return(
+        <div>
+            <button onClick={onClick}> Visitors</button>
+        </div>
+    )
+}
+export const FrequentVisitorButton =({onClick}) =>{
+
+    return(
+        <div>
+            <button onClick={onClick}>Frequent Visitors</button>
+        </div>
+    )
+}
+export const onHolidayButton =({onClick}) =>{
+
+    return(
+        <div>
+            <button onClick={onClick}>On Holiday Visitors</button>
+        </div>
+    )
+}
 const ContactedFx = () =>{
     const {filtered, loading} = useFetchData('Contacted')
     if(loading){
@@ -57,3 +81,65 @@ const ContactedFx = () =>{
 
 }
 export default ContactedFx;
+
+ export const FrequentVisitorFx = () =>{
+    const {filtered, loading} = useFetchData('FrequentVisitor')
+    if(loading){
+        return <div>loading....</div>
+    }
+
+  return(
+    <div>
+        {filtered.map(user => (
+           
+      <div key={user.id} className="user-card bg-white p-3 rounded mb-2 shadow-sm">
+        <h3>{user.name}</h3>
+        <p>{user.email}</p>
+      </div>
+    ))}
+    </div>
+  )
+
+}
+
+
+
+export const OnHolidayFx = () =>{
+    const {filtered, loading} = useFetchData('OnHoliday')
+    if(loading){
+        return <div>loading....</div>
+    }
+
+  return(
+    <div>
+        {filtered.map(user => (
+           
+      <div key={user.id} className="user-card bg-white p-3 rounded mb-2 shadow-sm">
+        <h3>{user.name}</h3>
+        <p>{user.email}</p>
+      </div>
+    ))}
+    </div>
+  )
+
+}
+
+
+export const VisitorsFx = () =>{
+    const {filtered, loading} = useFetchData('Visitors')
+    if(loading){
+        return <div>loading....</div>
+    }
+
+  return(
+    <div>
+        {filtered.map(user => (
+           
+      <div key={user.id} className="user-card bg-white p-3 rounded mb-2 shadow-sm">
+        <h3>{user.name}</h3>
+        <p>{user.email}</p>
+      </div>
+    ))}
+    </div>
+  )
+        }
