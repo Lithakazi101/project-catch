@@ -92,6 +92,10 @@ function App() {
         <div className="flex flex-col items-center justify-center min-h-screen">
           <h2>Contacted Visitors</h2>
           <ContactedFx />
+          <div className='mb-4'>
+          <button className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" onClick={handleAdminClick}>Back</button>
+          </div>
+         
           <button className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" onClick={homePage}>Home Page</button>
         </div>
       )}
@@ -100,14 +104,21 @@ function App() {
         <div className="flex flex-col items-center justify-center min-h-screen">
           <h2>Visitors</h2>
           <VisitorsFx />
+          <div className='mb-4'>
+          <button className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" onClick={handleAdminClick}>Back</button>
+          </div>
           <button className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" onClick={homePage}>Home Page</button>
+          
         </div>
       )}
 
       {currentView === 'sixth' && (
         <div className="flex flex-col items-center justify-center min-h-screen">
           <h2>On Holiday</h2>
-          <OnHolidayFx />
+          <OnHolidayFx />      
+           <div className='mb-4'>
+          <button className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" onClick={handleAdminClick}>Back</button>
+          </div>
           <button className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" onClick={homePage}>Home Page</button>
 
         </div>
@@ -117,6 +128,10 @@ function App() {
         <div className="flex flex-col items-center justify-center min-h-screen">
           <h2>Frequent Visitors</h2>
           <FrequentVisitorFx />
+          <div className='mb-4'>
+          <button className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" onClick={handleAdminClick}>Back</button>
+          </div>
+
           <button  className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" onClick={homePage}>Home</button>
         </div>
       )}
