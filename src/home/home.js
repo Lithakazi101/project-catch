@@ -15,11 +15,3 @@ export function AdminBtn({onClick}){
 </div>
   )
 }
-
-export function HomeBtn({onClick}){
- return(
- <div>
-    <button  className="bg-green-700 rounded border border-neutral-800 p-2 active:cursor-grabbing" onClick={onClick}>Home</button>
-  </div>)
-}
-
