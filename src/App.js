@@ -20,14 +20,12 @@ function App() {
     setCurrentView('first');
   };
 
-
-
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       {currentView === 'first' && (
-        <div>
+        <div className="flex flex-col items-center justify-center min-h-screen space-y-6">
           <NavBar />
-          <div className="flex space-x-14 items-center justify-center min-h-screen">
+          <div className="flex flex-wrap items-center justify-center gap-8 mt-6">
             <AdminBtn onClick={handleAdminClick} />
             <UserBtn onClick={handleUserClick} />
           </div>
@@ -35,25 +33,30 @@ function App() {
       )}
 
       {currentView === 'second' && (
-        <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
-   
+        <div className="flex flex-col items-center justify-center min-h-screen space-y-6">
           <Auth />
-          <div className='home'>   
-                   <button  className="home bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600 " onClick={homePage}>Home</button>
-          </div>
+          <button
+            className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600 mt-4"
+            onClick={homePage}
+          >
+            Home
+          </button>
         </div>
       )}
 
       {currentView === 'third' && (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
-          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 space-y-3 max-w-xs w-full">
+          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 space-y-4 max-w-xs w-full">
             <AddUserForm />
-            <button className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600" onClick={homePage}>Home Page</button>
+            <button
+              className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600 w-full mt-4"
+              onClick={homePage}
+            >
+              Home Page
+            </button>
           </div>
         </div>
       )}
-
-
     </div>
   );
 }
