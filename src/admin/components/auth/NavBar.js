@@ -1,5 +1,4 @@
 import './Nav.css';
-import { Filter } from './Filter';
 
 export const NavBar = () =>{
 
@@ -21,7 +20,7 @@ export const NavBarAdmin = () =>{
 
   return (
       
-    <nav className="flow-root ">
+    <nav className="flex items-center justify-center min-h-screen space-y-4">
          
       <h2>THE GREENROOM</h2>
     </nav>
